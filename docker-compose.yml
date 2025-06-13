@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  url-analyzer-backend:
+    build: .
+    command: ["/app/start.sh", "backend"]
+    ports:
+      - "8002:8002"
+    networks:
+      - url-analyzer
+
+  url-analyzer-frontend:
+    build: .
+    command: ["/app/start.sh", "frontend"]
+    ports:
+      - "8501:8501"
+    environment:
+      - BACKEND_URL=http://url-analyzer-backend:8002
+    depends_on:
+      - url-analyzer-backend
+    networks:
+      - url-analyzer
+
+networks:
+  url-analyzer:
+    driver: bridge
